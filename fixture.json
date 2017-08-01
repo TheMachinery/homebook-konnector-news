@@ -1,0 +1,6 @@
+{
+    "io.cozy.bills": [
+        {"_id": "toto"},
+        {"_id": "titi"}
+    ]
+}

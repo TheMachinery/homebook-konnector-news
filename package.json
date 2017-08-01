@@ -1,0 +1,17 @@
+{
+  "name": "tutokonnector",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "standalone": "cozy-konnector-standalone",
+    "dev": "cozy-konnector-dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cozy-konnector-libs": "^3.0.0-alpha.14",
+    "request-promise": "^4.2.1"
+  }
+}
