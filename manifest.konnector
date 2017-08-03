@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
-  "name": "tuto",
+  "name": "homebook-news",
   "type": "node",
-  "slug": "tuto",
+  "slug": "homebook-news",
   "description": "description",
   "source": "git://github.com/cozy/cozy-konnector-thename.git",
   "fields": {
@@ -18,15 +18,7 @@
   },
   "locales": {
     "fr": {
-      "description": "Récupère toutes vos factures",
-      "permissions": {
-        "bills": {
-          "description": "Utilisé pour sauvegarder les données de facturation"
-        },
-        "files": {
-          "description": "Utilisé pour sauvegarder les factures"
-        }
-      }
+      "description": "Récupère les news pour le homebook"      
     }
   },
   "permissions": {
