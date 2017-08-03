@@ -12,7 +12,6 @@ const DOCTYPE_NEWS = 'com.homebook.news';
 
 var apiToken;
 
-
 const options = {
 	method: 'POST',
 	url: loginUrl,
@@ -23,78 +22,103 @@ const options = {
 	}
 }
 
+cozyClient.data.defineIndex(DOCTYPE_NEWS, ['_id'])
+.then(index => cozyClient.data.query(index, {selector: {
+  _id: {
+    '$gt': null
+  }
+}}))
 
 
-request(options, (err, res) => {
-	if (err) {
-		console.log(err, 'error');
-	}    	
+.then(news => {
+	console.log(news.length, 'nb news');
+	news.map(item => {
+		cozyClient.data.delete(DOCTYPE_NEWS, item)
+	})
 
 
-	var body = JSON.parse(res.body);
-	apiToken = body.access_token;
-	if (!body.access_token || body.access_token == "") {
-		return false
-	}
+})
+.then(() => {
 
 
-	const optionsData = {
-		method: 'GET',
-		url: 'https://homebook-api.mymachinery.fr/news',
-		auth: {
-			bearer: apiToken
-		}
-	}
-    request(optionsData, (err, res) => {
-    	if (err) {
+
+	request(options, (err, res) => {
+		if (err) {
 			console.log(err, 'error');
 		}    	
 
 
 		var body = JSON.parse(res.body);
-		var data = body.data;
-		data.map(item => {
-			//console.log(item);
-			//cozyClient.data.create(DOCTYPE_NEWS, item)
+		apiToken = body.access_token;
+		if (!body.access_token || body.access_token == "") {
+			return false
+		}
 
-			try {
-				cozyClient.data.defineIndex(DOCTYPE_NEWS, ['id'])
-				.then(index => cozyClient.data.query(index, {selector: {
-				  id: item.id
-				}}))
-				.then(result => {
-					//update
-					if (result.length == 1) {
-						cozyClient.data.update(DOCTYPE_NEWS, result[0], item)
-						.catch((error) => {
-		            	 	console.log(error, "error");
-		            	})
-					} else {
-						//creation
-						cozyClient.data.create(DOCTYPE_NEWS, item)
-		            	.catch((error) => {
-		            	 	console.log(error, "error");
-		            	})
+
+		const optionsData = {
+			method: 'GET',
+			url: 'https://homebook-api.mymachinery.fr/news?page=1',
+			auth: {
+				bearer: apiToken
+			}
+		}
+	    request(optionsData, (err, res) => {
+	    	if (err) {
+				console.log(err, 'error');
+			}    	
+
+
+			var body = JSON.parse(res.body);
+			var data = body.data;
+			var meta = body.meta;
+			data.map(item => {
+				console.log(item);
+				cozyClient.data.create(DOCTYPE_NEWS, item)
+			});
+			return meta;
+		})
+		.then((res) => {
+			var res = JSON.parse(res);
+			var meta = res.meta;
+			if ( meta.pagination.total_pages > 1) {
+				for(var i=2;i<=meta.pagination.total_pages;i++) {
+
+					const optionsData = {
+						method: 'GET',
+						url: 'https://homebook-api.mymachinery.fr/news?page=' + i,
+						auth: {
+							bearer: apiToken
+						}
 					}
 
-				})
-
-	        } catch(err) {
-	        	console.log(err)
-	        }     
-
-
+					request(optionsData, (err, res) => {
+				    	if (err) {
+							console.log(err, 'error');
+						}    	
+						var body = JSON.parse(res.body);
+						var data = body.data;
+						data.map(item => {
+							console.log(item);
+							cozyClient.data.create(DOCTYPE_NEWS, item)
+						});
+					})
+				}
+			}
 		});
+
+	    
+
+
 		cozyClient.data.defineIndex(DOCTYPE_NEWS, ['_id'])
-		.then(index => cozyClient.data.query(index, {selector: {
-		  _id: {
-		    '$gt': null
-		  }
-		}}))
-		.then(news => {
-		    console.log('all good :) !')
-		})
+			.then(index => cozyClient.data.query(index, {selector: {
+			  _id: {
+			    '$gt': null
+			  }
+			}}))
+			.then(news => {
+			    console.log('all good :) !')
+			})
+	});
 
 
-    });
 });
