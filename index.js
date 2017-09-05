@@ -31,7 +31,7 @@ cozyClient.data.defineIndex(DOCTYPE_NEWS, ['_id'])
 
 
 .then(news => {
-	console.log(news.length, 'nb news');
+	//console.log(news.length, 'nb news');
 	news.map(item => {
 		cozyClient.data.delete(DOCTYPE_NEWS, item)
 	})
@@ -44,7 +44,7 @@ cozyClient.data.defineIndex(DOCTYPE_NEWS, ['_id'])
 
 	request(options, (err, res) => {
 		if (err) {
-			console.log(err, 'error');
+			//console.log(err, 'error');
 		}    	
 
 
@@ -64,7 +64,7 @@ cozyClient.data.defineIndex(DOCTYPE_NEWS, ['_id'])
 		}
 	    request(optionsData, (err, res) => {
 	    	if (err) {
-				console.log(err, 'error');
+				//console.log(err, 'error');
 			}    	
 
 
@@ -72,7 +72,7 @@ cozyClient.data.defineIndex(DOCTYPE_NEWS, ['_id'])
 			var data = body.data;
 			var meta = body.meta;
 			data.map(item => {
-				console.log(item);
+				//console.log(item);
 				cozyClient.data.create(DOCTYPE_NEWS, item)
 			});
 			return meta;
@@ -93,12 +93,12 @@ cozyClient.data.defineIndex(DOCTYPE_NEWS, ['_id'])
 
 					request(optionsData, (err, res) => {
 				    	if (err) {
-							console.log(err, 'error');
+							//console.log(err, 'error');
 						}    	
 						var body = JSON.parse(res.body);
 						var data = body.data;
 						data.map(item => {
-							console.log(item);
+							//console.log(item);
 							cozyClient.data.create(DOCTYPE_NEWS, item)
 						});
 					})
@@ -116,7 +116,7 @@ cozyClient.data.defineIndex(DOCTYPE_NEWS, ['_id'])
 			  }
 			}}))
 			.then(news => {
-			    console.log('all good :) !')
+			    //console.log('all good :) !')
 			})
 	});
 
