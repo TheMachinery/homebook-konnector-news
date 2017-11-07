@@ -71,6 +71,11 @@ cozyClient.data.defineIndex(DOCTYPE_NEWS, ['_id'])
 			var body = JSON.parse(res.body);
 			var data = body.data;
 			var meta = body.meta;
+
+			if (typeof data === 'undefined') {
+				return meta;
+			}
+			
 			data.map(item => {
 				//console.log(item);
 				cozyClient.data.create(DOCTYPE_NEWS, item)
